@@ -9,7 +9,7 @@
 package com.sangeng.sangengspringsecurity.exception;
 
 
-import io.renren.common.utils.MessageUtils;
+import com.sangeng.sangengspringsecurity.utils.MessageUtils;
 
 /**
  * 自定义异常
