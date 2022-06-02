@@ -21,7 +21,7 @@ public class JwtUtil {
     public static final Long JWT_TTL = 60*60*1000L;//60*60*1000l 一小时
 
     //设置密钥明文
-    public static final String JWT_KEY = "sange";
+    public static final String JWT_KEY = "sangeng";
 
     public static String getUID(){
         String token = UUID.randomUUID().toString().replace("-","");
@@ -105,9 +105,9 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public static void main(String args) throws Exception{
-        String token = "";
-        Claims claims = parseJWT(token);
-        System.out.println(claims);
+    public static void main(String[] args) throws Exception{
+//        String jwt = createJWT("1234");
+        Claims claims = parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3ZjIwMGVlYTA0MzA0MTdhOGQ0MGJjY2Y0MTJjMTY1MiIsInN1YiI6IjEyMzQiLCJpc3MiOiJzZyIsImlhdCI6MTY1NDE2MjkxNiwiZXhwIjoxNjU0MTY2NTE2fQ.CF00mEpRyyWGIngVVZpMX6bZ8SO6LUppF1B45hxuc6E");
+        System.out.println(claims.getSubject());
     }
 }
