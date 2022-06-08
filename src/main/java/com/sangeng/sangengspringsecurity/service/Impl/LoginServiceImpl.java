@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +46,23 @@ public class LoginServiceImpl implements LoginService {
         //3.如果认证通过了，使用userid生成jwt，jwt存入Result返回
         LoginUser loginUser = (LoginUser)authentication.getPrincipal();
         SysUserEntity userEntity = loginUser.getUserEntity();
-        String jwt = JwtUtil.createJWT(userEntity.getId().toString(), 30000L);
+        String jwt = JwtUtil.createJWT(userEntity.getId().toString(), 60*60*60*1000L);
         Map<String,String> map = new HashMap<>();
         map.put("token",jwt);
         //4.把完整的用户信息存入redis，userid作为key
-        redisCache.setCacheObject("login:" + userEntity.getId().toString(),userEntity,120, TimeUnit.SECONDS);
+        redisCache.setCacheObject("login:" + userEntity.getId().toString(),userEntity,60*60, TimeUnit.SECONDS);
         return new Result().ok(map);
+    }
+
+    /**
+     * 退出
+     */
+    @Override
+    public void loginOut() {
+        //1.从SecurityContextHolder中获取用户id
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SysUserEntity sysUserEntity = (SysUserEntity)authentication.getPrincipal();
+        //2.根据登录用户的userid删除redis中的用户信息
+        redisCache.deleteObject("login:" + sysUserEntity.getId());
     }
 }

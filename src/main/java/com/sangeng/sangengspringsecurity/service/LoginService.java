@@ -11,4 +11,9 @@ public interface LoginService {
      * @return
      */
     public Result login(SysUserDTO sysUserDTO);
+
+    /**
+     * 退出
+     */
+    void loginOut();
 }

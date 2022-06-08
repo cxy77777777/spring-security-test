@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * 定义spring-Security密码加密机制
+ * 定义spring-Securit配置
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
