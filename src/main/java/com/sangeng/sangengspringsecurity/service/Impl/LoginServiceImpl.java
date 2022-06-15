@@ -50,7 +50,7 @@ public class LoginServiceImpl implements LoginService {
         Map<String,String> map = new HashMap<>();
         map.put("token",jwt);
         //4.把完整的用户信息存入redis，userid作为key
-        redisCache.setCacheObject("login:" + userEntity.getId().toString(),userEntity,60*60, TimeUnit.SECONDS);
+        redisCache.setCacheObject("login:" + userEntity.getId().toString(),loginUser,60*60, TimeUnit.SECONDS);
         return new Result().ok(map);
     }
 
@@ -61,8 +61,8 @@ public class LoginServiceImpl implements LoginService {
     public void loginOut() {
         //1.从SecurityContextHolder中获取用户id
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SysUserEntity sysUserEntity = (SysUserEntity)authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser)authentication.getPrincipal();
         //2.根据登录用户的userid删除redis中的用户信息
-        redisCache.deleteObject("login:" + sysUserEntity.getId());
+        redisCache.deleteObject("login:" + loginUser.getUserEntity().getId());
     }
 }

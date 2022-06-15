@@ -1,5 +1,6 @@
 package com.sangeng.sangengspringsecurity.filter;
 
+import com.sangeng.sangengspringsecurity.dto.LoginUser;
 import com.sangeng.sangengspringsecurity.entity.SysUserEntity;
 import com.sangeng.sangengspringsecurity.utils.JwtUtil;
 import com.sangeng.sangengspringsecurity.utils.RedisCache;
@@ -43,15 +44,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new RuntimeException("token非法！");
         }
         //3.从redis中获取用户信息
-        SysUserEntity sysUserEntity = redisCache.getCacheObject("login:" + userId);
-        if (Objects.isNull(sysUserEntity)){
+        LoginUser loginUser = redisCache.getCacheObject("login:" + userId);
+        if (Objects.isNull(loginUser)){
             throw new RuntimeException("用户未登录！");
         }
         //4.存入SecurityContextHolder,用于后面的过滤器获取信息
         //UsernamePasswordAuthenticationToken（）需要用三个参数构造，三个参数 会把该标志位置为true，代表认证通过
         //需要获取权限信息封装到Authentication中
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(sysUserEntity,null,null);
+                new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //5.认证通过放行filterChain.doFilter(request,response);
         filterChain.doFilter(request,response);
