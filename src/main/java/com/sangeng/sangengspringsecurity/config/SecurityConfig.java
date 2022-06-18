@@ -47,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
-                //关闭csrf
+                //关闭csrf，前后端分离项目因为已配置jwt-token认证，即已经屏蔽掉了CSRF攻击，所以不在需要开启csrf，
+                // 如果不关闭则会进行csrf_token的校验，一般情况下请求头中不带csrf_token，若不关闭则会校验不通过。
                 csrf().disable()
                 //不通过Session获取SecurityContext
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -55,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //对于登录接口允许匿名访问
                 .antMatchers("/user/login").anonymous()
+                //基于配置的权限控制
+                .antMatchers("/testCros").hasAuthority("homestead:homesteadinfoproblem:update")
                 //出上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //把定义的jwtAuthenticationTokenFilter过滤器位置放在UsernamePasswordAuthenticationFilter之前
