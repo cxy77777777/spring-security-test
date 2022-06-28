@@ -3,6 +3,8 @@ package com.sangeng.sangengspringsecurity.service;
 import com.sangeng.sangengspringsecurity.domain.Result;
 import com.sangeng.sangengspringsecurity.dto.SysUserDTO;
 
+import java.util.List;
+
 public interface LoginService {
 
     /**
@@ -16,4 +18,11 @@ public interface LoginService {
      * 退出
      */
     void loginOut();
+
+    /**
+     *根据userid获取权限
+     * @param userId
+     * @return
+     */
+    List<String> generateRoutes(Long userId);
 }

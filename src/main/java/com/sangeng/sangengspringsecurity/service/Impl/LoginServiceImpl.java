@@ -5,6 +5,7 @@ import com.sangeng.sangengspringsecurity.domain.Result;
 import com.sangeng.sangengspringsecurity.dto.LoginUser;
 import com.sangeng.sangengspringsecurity.dto.SysUserDTO;
 import com.sangeng.sangengspringsecurity.entity.SysUserEntity;
+import com.sangeng.sangengspringsecurity.mapper.SysMenuMapper;
 import com.sangeng.sangengspringsecurity.service.LoginService;
 import com.sangeng.sangengspringsecurity.utils.JwtUtil;
 import com.sangeng.sangengspringsecurity.utils.RedisCache;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,9 @@ public class LoginServiceImpl implements LoginService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private SysMenuMapper sysMenuMapper;
 
     /**
      * 登录
@@ -64,5 +69,15 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser)authentication.getPrincipal();
         //2.根据登录用户的userid删除redis中的用户信息
         redisCache.deleteObject("login:" + loginUser.getUserEntity().getId());
+    }
+
+    /**
+     *根据userid获取权限
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> generateRoutes(Long userId) {
+        return sysMenuMapper.getPermsByUserId(userId);
     }
 }

@@ -1,6 +1,7 @@
 server:
   port: 10001
-
+  servlet:
+    context-path: /sggapi
 spring:
   application:
     name: SangengSpringSecurity
