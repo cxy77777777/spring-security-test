@@ -43,9 +43,12 @@ public class SysUserServiceImpl implements SysUserService {
         //去掉list空字符串
         List<String> filtered=newList.stream().filter(string -> !string.isEmpty()).collect(Collectors.toList());
         Map<String,Object> map = new HashMap<>();
+        //添加权限菜单
         map.put("roles",filtered);
+        //添加名称
         map.put("name","admin");
-        map.put("avatar",filtered);
+        //添加头像
+        map.put("avatar","https://shujutong.oss-cn-north-2.unicloudsrv.com/zhaijidi/877515c2c1bd41d4bd07064dbcfd2659/1.jpg");
         return map;
     }
 }
