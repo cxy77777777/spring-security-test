@@ -32,8 +32,6 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Map<String,Object> getInfo(Long id) {
         LoginUser loginUser = redisCache.getCacheObject("login:" + id);
-        SysUserDTO sysUserDTO = new SysUserDTO();
-        BeanUtils.copyProperties(loginUser.getUserEntity(),sysUserDTO);
 
         //查询对应的权限信息
         List<String> listPermis = sysMenuMapper.getPermsByUserId(id);
@@ -46,7 +44,7 @@ public class SysUserServiceImpl implements SysUserService {
         //添加权限菜单
         map.put("roles",filtered);
         //添加名称
-        map.put("name","admin");
+        map.put("name",loginUser.getUserEntity().getRealName());
         //添加头像
         map.put("avatar","https://shujutong.oss-cn-north-2.unicloudsrv.com/zhaijidi/877515c2c1bd41d4bd07064dbcfd2659/1.jpg");
         return map;
