@@ -1,6 +1,5 @@
 package com.sangeng.sangengspringsecurity.service.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.sangeng.sangengspringsecurity.domain.Result;
 import com.sangeng.sangengspringsecurity.dto.LoginUser;
 import com.sangeng.sangengspringsecurity.dto.SysUserDTO;
@@ -15,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.util.HashMap;
 import java.util.List;

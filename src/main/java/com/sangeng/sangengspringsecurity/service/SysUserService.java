@@ -1,13 +1,11 @@
 package com.sangeng.sangengspringsecurity.service;
 
-import com.sangeng.sangengspringsecurity.dto.SysUserDTO;
-
 import java.util.Map;
 
 public interface SysUserService {
 
     /**
-     * 用户详情
+     * 根据用户id获取权限菜单及用户相关信息
      * @return
      */
     Map<String,Object> getInfo(Long id);

@@ -1,20 +1,18 @@
 package com.sangeng.sangengspringsecurity.service.Impl;
 
 import com.sangeng.sangengspringsecurity.dto.LoginUser;
-import com.sangeng.sangengspringsecurity.dto.SysUserDTO;
 import com.sangeng.sangengspringsecurity.mapper.SysMenuMapper;
 import com.sangeng.sangengspringsecurity.mapper.UserMapper;
 import com.sangeng.sangengspringsecurity.service.SysUserService;
+import com.sangeng.sangengspringsecurity.utils.CollectionTools;
 import com.sangeng.sangengspringsecurity.utils.RedisCache;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -26,7 +24,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private UserMapper userMapper;
     /**
-     * 根据用户id获取详情
+     * 根据用户id获取权限菜单及用户相关信息
      * @return
      */
     @Override
@@ -35,14 +33,12 @@ public class SysUserServiceImpl implements SysUserService {
 
         //查询对应的权限信息
         List<String> listPermis = sysMenuMapper.getPermsByUserId(id);
-        //去掉list中的null
-        List<String> newList = listPermis.stream().filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        //去掉list空字符串
-        List<String> filtered=newList.stream().filter(string -> !string.isEmpty()).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(listPermis)){
+            listPermis = CollectionTools.removeEmptyString(listPermis);
+        }
         Map<String,Object> map = new HashMap<>();
         //添加权限菜单
-        map.put("roles",filtered);
+        map.put("roles",listPermis);
         //添加名称
         map.put("name",loginUser.getUserEntity().getRealName());
         //添加头像
